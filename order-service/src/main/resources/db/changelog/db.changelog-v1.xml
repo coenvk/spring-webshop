@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.7.xsd">
+    <changeSet id="createTable__order" author="Coen">
+        <createTable tableName="order">
+            <column name="id" type="uuid">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="street" type="varchar">
+                <constraints nullable="false"/>
+            </column>
+            <column name="city" type="varchar">
+                <constraints nullable="false"/>
+            </column>
+            <column name="state" type="varchar">
+                <constraints nullable="false"/>
+            </column>
+            <column name="country" type="varchar">
+                <constraints nullable="false"/>
+            </column>
+            <column name="zip_code" type="varchar">
+                <constraints nullable="false"/>
+            </column>
+            <column name="status" type="smallint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_at" type="bigint" defaultValue="date_part('epoch', now())" defaultOnNull="true">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="createTable__order_line" author="Coen">
+        <createTable tableName="order_line">
+            <column name="id" type="uuid">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="product_id" type="uuid">
+                <constraints nullable="false"/>
+            </column>
+            <column name="quantity" type="int" defaultValueNumeric="1">
+                <constraints nullable="false"/>
+            </column>
+            <column name="order_id" type="uuid">
+                <constraints nullable="false" foreignKeyName="fk_order_line_order" references="order(id)"/>
+            </column>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>

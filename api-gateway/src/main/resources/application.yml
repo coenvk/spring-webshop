@@ -1,0 +1,63 @@
+spring:
+  application:
+    name: api-gateway
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+      routes:
+        - id: catalog-service
+          uri: lb://catalog-service
+          predicates:
+            - Path=/catalog/**
+          filters:
+            - StripPrefix=1
+        - id: inventory-service
+          uri: lb://inventory-service
+          predicates:
+            - Path=/inventory/**
+          filters:
+            - StripPrefix=1
+        - id: order-service
+          uri: lb://order-service
+          predicates:
+            - Path=/order/**
+          filters:
+            - StripPrefix=1
+        - id: payment-service
+          uri: lb://payment-service
+          predicates:
+            - Path=/payment/**
+          filters:
+            - StripPrefix=1
+        - id: shipment-service
+          uri: lb://shipment-service
+          predicates:
+            - Path=/shipment/**
+          filters:
+            - StripPrefix=1
+      filter:
+        request-rate-limiter:
+          enabled: true
+        retry:
+          enabled: true
+
+resilience4j:
+  ratelimiter:
+    instances:
+      basic:
+        limitForPeriod: 2
+        limitRefreshPeriod: 1s
+        timeoutDuration: 1s
+  circuitbreaker:
+    circuit-breaker-aspect-order: 1
+  retry:
+    retry-aspect-order: 2
+
+eureka:
+  client:
+    fetch-registry: true
+    register-with-eureka: true
+    healthcheck:
+      enabled: true

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.7.xsd">
+    <changeSet id="createTable__shipment" author="Coen">
+        <createTable tableName="shipment">
+            <column name="id" type="uuid">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="start_date" type="bigint"/>
+            <column name="delivery_date" type="bigint"/>
+            <column name="status" type="smallint">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="createTable__shipment_item" author="Coen">
+        <createTable tableName="shipment_item">
+            <column name="order_id" type="uuid">
+                <constraints nullable="false"/>
+            </column>
+            <column name="total_quantity" type="int"/>
+            <column name="shipment_id" type="uuid">
+                <constraints nullable="false" foreignKeyName="fk_shipment_item_shipment" references="shipment(id)"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="addPrimaryKey__shipment_item" author="Coen">
+        <addPrimaryKey tableName="shipment_item" columnNames="order_id,shipment_id"/>
+    </changeSet>
+</databaseChangeLog>

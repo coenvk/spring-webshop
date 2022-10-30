@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.7.xsd">
+    <changeSet id="createTable__warehouse" author="Coen">
+        <createTable tableName="warehouse">
+            <column name="id" type="uuid">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="name" type="varchar">
+                <constraints nullable="false"/>
+            </column>
+            <column name="street" type="varchar"/>
+            <column name="city" type="varchar"/>
+            <column name="state" type="varchar"/>
+            <column name="country" type="varchar"/>
+            <column name="zip_code" type="varchar"/>
+            <column name="created_at" type="bigint" defaultValue="date_part('epoch', now())" defaultOnNull="true">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="createTable__inventory" author="Coen">
+        <createTable tableName="inventory">
+            <column name="product_id" type="uuid">
+                <constraints nullable="false"/>
+            </column>
+            <column name="warehouse_id" type="uuid">
+                <constraints nullable="false" foreignKeyName="fk_inventory_warehouse" references="warehouse(id)"/>
+            </column>
+            <column name="quantity" type="bigint" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="addPrimaryKey__inventory" author="Coen">
+        <addPrimaryKey tableName="inventory" columnNames="product_id,warehouse_id"/>
+    </changeSet>
+</databaseChangeLog>
